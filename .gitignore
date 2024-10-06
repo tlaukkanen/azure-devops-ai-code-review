@@ -398,4 +398,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-src/dist/
+ai-code-review/dist/

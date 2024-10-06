@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
-    "build": "tsc --build tsconfig.json"
+    "build": "tsc --build tsconfig.json",
+    "clean": "rimraf dist"
   },
   "keywords": [],
   "author": "Tommi Laukkanen",
@@ -23,6 +24,7 @@
     "@types/mocha": "10.0.8",
     "@types/node": "20.16.10",
     "@types/q": "1.5.8",
+    "rimraf": "^6.0.1",
     "sync-request": "6.1.0"
   }
 }
