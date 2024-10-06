@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "name": "AI Code Review Task",
   "description": "AI code review extension to review pull request changes using your own Azure OpenAI endpoints",
-  "public": true,
+  "public": false,
   "categories": ["Azure Repos", "Azure Pipelines"],
   "tags": ["ai", "openai", "gpt", "llm", "gpt4", "copilot", "code", "review", "chatgpt"],
   "repository": {
