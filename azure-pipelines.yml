@@ -19,7 +19,7 @@ steps:
     npm install
     npm run build
   displayName: 'Build'
-  workingDirectory: '/src'
+  workingDirectory: '$(Build.SourcesDirectory)/src'
 
 - script: |
     npx tfx-cli extension create
