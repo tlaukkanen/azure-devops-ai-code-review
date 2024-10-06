@@ -1,0 +1,43 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm install -g tfx-cli
+  displayName: 'npm install'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'Build'
+  workingDirectory: '/src'
+
+- script: |
+    npx tfx-cli extension create
+  displayName: Create VSIX package
+
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)'
+    contents: '*.vsix'
+    targetFolder: $(Build.ArtifactStagingDirectory)
+  displayName: 'Copy .VSIX package'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    artifactName: vsix
+  displayName: 'Publish VSIX package'
+
+- script: |
+    npx tfx-cli extension publish --token $(MarketplaceAccessToken) --publisher TommiLaukkanen --manifest vss-extension.json
+  displayName: Publish to Marketplace

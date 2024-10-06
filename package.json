@@ -1,0 +1,23 @@
+{
+  "name": "azure-devops-ai-code-review",
+  "version": "1.0.0",
+  "description": "AI code review extension for Azure DevOps using Azure OpenAI services",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tlaukkanen/azure-devops-ai-code-review.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tlaukkanen/azure-devops-ai-code-review/issues"
+  },
+  "homepage": "https://github.com/tlaukkanen/azure-devops-ai-code-review#readme",
+  "dependencies": {
+    "vss-web-extension-sdk": "^5.141.0"
+  }
+}

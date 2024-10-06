@@ -1,11 +1,11 @@
 import tl = require('azure-pipelines-task-lib/task');
 import { encode } from 'gpt-tokenizer';
-import OpenAI from "openai";
+import OpenAI, { AzureOpenAI } from 'openai';
 
-export class ChatGPT {
+export class ChatCompletion {
     private readonly systemMessage: string = '';
 
-    constructor(private _openAi: OpenAI, checkForBugs: boolean = false, checkForPerformance: boolean = false, checkForBestPractices: boolean = false, additionalPrompts: string[] = []) {
+    constructor(private _openAi: AzureOpenAI, checkForBugs: boolean = false, checkForPerformance: boolean = false, checkForBestPractices: boolean = false, additionalPrompts: string[] = []) {
         this.systemMessage = `Your task is to act as a code reviewer of a Pull Request:
         - Use bullet points if you have multiple comments.
         ${checkForBugs ? '- If there are any bugs, highlight them.' : null}
@@ -23,23 +23,8 @@ export class ChatGPT {
 
     public async PerformCodeReview(diff: string, fileName: string): Promise<string> {
 
-        let model = tl.getInput('ai_model', true) as | (string & {})
-            | 'gpt-4-1106-preview'
-            | 'gpt-4-vision-preview'
-            | 'gpt-4'
-            | 'gpt-4-0314'
-            | 'gpt-4-0613'
-            | 'gpt-4-32k'
-            | 'gpt-4-32k-0314'
-            | 'gpt-4-32k-0613'
-            | 'gpt-3.5-turbo-1106'
-            | 'gpt-3.5-turbo'
-            | 'gpt-3.5-turbo-16k'
-            | 'gpt-3.5-turbo-0301'
-            | 'gpt-3.5-turbo-0613'
-            | 'gpt-3.5-turbo-16k-0613';
-
         if (!this.doesMessageExceedTokenLimit(diff + this.systemMessage, 4097)) {
+
             let openAi = await this._openAi.chat.completions.create({
                 messages: [
                     {
@@ -49,8 +34,9 @@ export class ChatGPT {
                     {
                         role: 'user',
                         content: diff
-                    }
-                ], model: model
+                    },
+                ],
+                model: ''
             });
 
             let response = openAi.choices;

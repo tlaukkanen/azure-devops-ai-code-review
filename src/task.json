@@ -1,48 +1,41 @@
 {
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
     "id": "abd1f390-3d55-4eb2-af0a-273c5dbf256f",
-    "name": "OpenAICodeReview",
-    "friendlyName": "Open AI Code Review",
-    "description": "Complete a Code Review using Open AI",
+    "name": "AICodeReview",
+    "friendlyName": "AI Code Review",
+    "description": "Complete a Code Review using Azure OpenAI services",
     "category": "Utility",
-    "author": "Aidan Cole",
+    "author": "Tommi Laukkanen",
     "version": {
         "Major": 1,
         "Minor": 0,
         "Patch": 0
     },
-    "instanceNameFormat": "Open AI Code Review $(message)",
+    "instanceNameFormat": "AI Code Review $(message)",
     "inputs": [
         {
-            "name": "api_key",
+            "name": "azureOpenAiDeploymentEndpointUrl",
             "type": "string",
-            "label": "Open AI API Key",
+            "label": "Azure OpenAI deployment endpoint URL",
             "defaultValue": "",
             "required": true,
-            "helpMarkDown": "API Key for Open AI API. "
+            "helpMarkDown": "URL to your Azure OpenAI deployment endpoint."
         },
         {
-            "name": "ai_model",
-            "type": "pickList",
-            "label": "Open AI API Model",
-            "defaultValue": "gpt-3.5-turbo",
-            "options": {
-                "gpt-4-1106-preview": "gpt-4-1106-preview",
-                "gpt-4-vision-preview": "gpt-4-vision-preview",
-                "gpt-4": "gpt-4",
-                "gpt-4-0314": "gpt-4-0314",
-                "gpt-4-0613": "gpt-4-0613",
-                "gpt-4-32k": "gpt-4-32k",
-                "gpt-4-32k-0314": "gpt-4-32k-0314",
-                "gpt-4-32k-0613": "gpt-4-32k-0613",
-                "gpt-3.5-turbo-1106": "gpt-3.5-turbo-1106",
-                "gpt-3.5-turbo": "gpt-3.5-turbo",
-                "gpt-3.5-turbo-16k": "gpt-3.5-turbo-16k",
-                "gpt-3.5-turbo-0301": "gpt-3.5-turbo-0301",
-                "gpt-3.5-turbo-0613": "gpt-3.5-turbo-0613",
-                "gpt-3.5-turbo-16k-0613": "gpt-3.5-turbo-16k-0613"
-            },
-            "helpMarkDown": "## OpenAI API Model Configuration\n\n### Description\nChoose the Open AI API model for code analysis. The selected model determines the depth and capabilities of the code review performed by Open AI.\n\n### Options\n- **gpt-4-1106-preview:** Preview version of GPT-4 released on June 11, 202x.\n- **gpt-4-vision-preview:** Preview version of GPT-4 with enhanced vision capabilities.\n- **gpt-4:** Latest stable release of GPT-4.\n- **gpt-4-0314:** GPT-4 version released on March 14, 202x.\n- **gpt-4-0613:** GPT-4 version released on June 13, 202x.\n- **gpt-4-32k:** GPT-4 version with a 32k parameter size.\n- **gpt-4-32k-0314:** GPT-4 version with 32k parameters, released on March 14, 202x.\n- **gpt-4-32k-0613:** GPT-4 version with 32k parameters, released on June 13, 202x.\n- **gpt-3.5-turbo-1106:** Preview version of GPT-3.5 Turbo released on November 6, 202x.\n- **gpt-3.5-turbo:** Latest stable release of GPT-3.5 Turbo.\n- **gpt-3.5-turbo-16k:** GPT-3.5 Turbo version with a 16k parameter size.\n- **gpt-3.5-turbo-0301:** GPT-3.5 Turbo version released on March 1, 202x.\n- **gpt-3.5-turbo-0613:** GPT-3.5 Turbo version released on June 13, 202x.\n- **gpt-3.5-turbo-16k-0613:** GPT-3.5 Turbo version with 16k parameters, released on June 13, 202x.\n\n### Default Value\nThe default Open AI API model is set to **gpt-3.5-turbo**.\n\n Choose the model that best suits your code review requirements."
+            "name": "azureOpenAiApiKey",
+            "type": "string",
+            "label": "Key to your Azure OpenAI deployment endpoint",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Key to your Azure OpenAI deployment endpoint."
+        },
+        {
+            "name": "azureOpenAiApiVersion",
+            "type": "string",
+            "label": "Azure OpenAI API version",
+            "defaultValue": "2024-07-01-preview",
+            "required": true,
+            "helpMarkDown": "Azure OpenAI API version."
         },
         {
             "name": "bugs",
@@ -83,11 +76,11 @@
         },
         {
             "name": "additional_prompts",
-            "type": "string",
+            "type": "multiLine",
             "label": "Additional Prompts",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Specify additional Open AI prompts as a comma-separated list to enhance the code review process.\n\n- Add multiple prompts separated by commas.\n- These prompts will be used in conjunction with the main code review prompts.\n\n**Example:**\n```plaintext\nFix variable naming, Ensure consistent indentation, Review error handling approach\n```"
+            "helpMarkDown": "Specify additional Open AI prompt to enhance the code review process.\n\n- This prompt will be used in conjunction with the main code review prompts.\n\n**Example:**\n```plaintext\nFix variable naming, Ensure consistent indentation, Review error handling approach\n```"
         }
     ],
     "execution": {
