@@ -7,7 +7,6 @@ export class ChatCompletion {
 
     constructor(private _openAi: AzureOpenAI, checkForBugs: boolean = false, checkForPerformance: boolean = false, checkForBestPractices: boolean = false, additionalPrompts: string[] = []) {
         this.systemMessage = `Your task is to act as a code reviewer of a Pull Request:
-        - Use bullet points if you have multiple comments. Utilize emojis to make your comments more engaging.
         ${checkForBugs ? '- If there are any bugs, highlight them.' : null}
         ${checkForPerformance ? '- If there are major performance problems, highlight them.' : null}
         ${checkForBestPractices ? '- Provide details on missed use of best-practices.' : null}
@@ -18,7 +17,10 @@ export class ChatCompletion {
     
         You are provided with the code changes (diffs) in a unidiff format.
         
-        The response should be in markdown format. Use the code block syntax for larger code snippets and inline code syntax for smaller code snippets.
+        The response should be in markdown format:
+        - Use bullet points if you have multiple comments. Utilize emojis to make your comments more engaging.
+        - Use the code block syntax for larger code snippets but do not wrap the whole response in a code block
+        - Use inline code syntax for smaller inline code snippets
         `
     }
 
