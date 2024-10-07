@@ -24,36 +24,38 @@ Use your own Azure OpenAI service endpoints to provide pull request code reviews
 1. Install the AI Code Review DevOps Extension from the Azure DevOps Marketplace.
 2. Add Open AI Code Review Task to Your Pipeline:
 
-   ```yaml
-   trigger:
-     branches:
-       exclude:
-         - '*'
+  ```yaml
+  trigger:
+    branches:
+      exclude:
+        - '*'
 
-   pr:
-     branches:
-       include:
-         - '*'
+  pr:
+    branches:
+      include:
+        - '*'
 
-   jobs:
-   - job: CodeReview
-     pool:
-       vmImage: 'ubuntu-latest'
-     steps:
-     - task: AICodeReview@1
-       inputs:
-         azureOpenAiDeploymentEndpointUrl: $(AzureOpenAiDeploymentEndpoint)
-         azureOpenAiApiKey: $(AzureOpenAiDeploymentKey)
-         azureOpenAiApiVersion: "2024-07-01-preview"
-         promptTokensPricePerToken: "0.00015"
-         completionTokensPricePerToken: "0.0006"
-         bugs: true
-         performance: true
-         best_practices: true
-         file_extensions: '.js,.ts,.css,.html,.py,.tf'
-         file_excludes: 'file1.js,file2.py,secret.txt'
-         additional_prompts: 'Fix variable naming, Ensure consistent indentation, Review error handling approach'`
-   
+  jobs:
+  - job: CodeReview
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: AICodeReview@1
+      inputs:
+        azureOpenAiDeploymentEndpointUrl: $(AzureOpenAiDeploymentEndpoint)
+        azureOpenAiApiKey: $(AzureOpenAiDeploymentKey)
+        azureOpenAiApiVersion: "2024-07-01-preview"
+        promptTokensPricePerMillionTokens: "0.15"
+        completionTokensPricePerMillionTokens: "0.6"
+        bugs: true
+        performance: true
+        bestPractices: true
+        fileExtensions: '.js,.ts,.css,.html,.py,.tf'
+        fileExcludes: 'file1.js,file2.py,secret.txt'
+        additionalPrompts: |
+          Fix variable naming, Ensure consistent indentation, Review error handling approach
+  ```
+
 3. If you do not already have Build Validation configured for your branch already add [Build validation](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser#build-validation) to your branch policy to trigger the code review when a Pull Request is created
 
 ## FAQ

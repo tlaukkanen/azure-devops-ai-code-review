@@ -27,8 +27,11 @@ export class Repository {
         let filesToReview = files.filter(file => !binaryExtensions.includes(file.slice((file.lastIndexOf(".") - 1 >>> 0) + 2)));
 
         if(fileExtensions) {
+            console.log(`File extensions specified: ${fileExtensions}`);
             let fileExtensionsToInclude = fileExtensions.trim().split(',');
             filesToReview = filesToReview.filter(file => fileExtensionsToInclude.includes(file.substring(file.lastIndexOf('.'))));
+        } else {
+            console.log('No file extensions specified. All files will be reviewed.');
         }
 
         if(filesToExclude) {

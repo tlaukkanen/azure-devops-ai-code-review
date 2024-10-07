@@ -27,8 +27,8 @@ export class Main {
         const fileExtensions = tl.getInput('fileExtensions', false);
         const filesToExclude = tl.getInput('fileExcludes', false);
         const additionalPrompts = tl.getInput('additionalPrompts', false)?.split(',')
-        const promptTokensPricePerToken = parseFloat(tl.getInput('promptTokensPricePerToken', false) ?? '0.');
-        const completionTokensPricePerToken = parseFloat(tl.getInput('completionTokensPricePerToken', false) ?? '0.');
+        const promptTokensPricePerMillionTokens = parseFloat(tl.getInput('promptTokensPricePerMillionTokens', false) ?? '0.');
+        const completionTokensPricePerMillionTokens = parseFloat(tl.getInput('completionTokensPricePerMillionTokens', false) ?? '0.');
 
         const client = new AzureOpenAI({
             endpoint: endpointUrl,
@@ -36,7 +36,7 @@ export class Main {
             apiVersion: apiVersion
         });
         
-        this._chatCompletion = new ChatCompletion(client, tl.getBoolInput('bugs', true), tl.getBoolInput('performance', true), tl.getBoolInput('best_practices', true), additionalPrompts);
+        this._chatCompletion = new ChatCompletion(client, tl.getBoolInput('bugs', true), tl.getBoolInput('performance', true), tl.getBoolInput('bestPractices', true), additionalPrompts);
         this._repository = new Repository();
         this._pullRequest = new PullRequest();
 
@@ -63,11 +63,14 @@ export class Main {
             tl.setProgress((fileToReview.length / 100) * index, 'Performing Code Review');
         }
 
-        if(promptTokensPricePerToken !== 0 || completionTokensPricePerToken !== 0) {
-            let promptTokensCost = promptTokensTotal * promptTokensPricePerToken;
-            let completionTokensCost = completionTokensTotal * completionTokensPricePerToken;
-            console.info(`Prompt Tokens Cost: ${promptTokensCost}, Completion Tokens Cost: ${completionTokensCost}`);
-            console.info(`Total Prompt Tokens: ${promptTokensTotal}, Total Completion Tokens: ${completionTokensTotal}, Total Cost: ${promptTokensCost + completionTokensCost}`);
+        if(promptTokensPricePerMillionTokens !== 0 || completionTokensPricePerMillionTokens !== 0) {
+            let promptTokensCost = promptTokensTotal * (promptTokensPricePerMillionTokens / 1000000);
+            let completionTokensCost = completionTokensTotal * (completionTokensPricePerMillionTokens / 1000000);
+            console.info(`Total Prompt Tokens     : ${promptTokensTotal}`);
+            console.info(`Total Completion Tokens : ${completionTokensTotal}`); 
+            console.info(`Prompt Tokens Cost      : ${promptTokensCost} $`);
+            console.info(`Completion Tokens Cost  : ${completionTokensCost} $`);
+            console.info(`Total Cost              : ${promptTokensCost + completionTokensCost} $`);
         }
         tl.setResult(tl.TaskResult.Succeeded, "Pull Request reviewed.");
     }
