@@ -64,13 +64,14 @@ export class Main {
         }
 
         if(promptTokensPricePerMillionTokens !== 0 || completionTokensPricePerMillionTokens !== 0) {
-            let promptTokensCost = promptTokensTotal * (promptTokensPricePerMillionTokens / 1000000);
-            let completionTokensCost = completionTokensTotal * (completionTokensPricePerMillionTokens / 1000000);
+            const promptTokensCost = promptTokensTotal * (promptTokensPricePerMillionTokens / 1000000);
+            const completionTokensCost = completionTokensTotal * (completionTokensPricePerMillionTokens / 1000000);
+            const totalCostString = (promptTokensCost + completionTokensCost).toFixed(4);
             console.info(`Total Prompt Tokens     : ${promptTokensTotal}`);
             console.info(`Total Completion Tokens : ${completionTokensTotal}`); 
             console.info(`Prompt Tokens Cost      : ${promptTokensCost} $`);
             console.info(`Completion Tokens Cost  : ${completionTokensCost} $`);
-            console.info(`Total Cost              : ${promptTokensCost + completionTokensCost} $`);
+            console.info(`Total Cost              : ${totalCostString} $`);
         }
         tl.setResult(tl.TaskResult.Succeeded, "Pull Request reviewed.");
     }

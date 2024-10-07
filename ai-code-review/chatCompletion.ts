@@ -8,9 +8,9 @@ export class ChatCompletion {
     constructor(private _openAi: AzureOpenAI, checkForBugs: boolean = false, checkForPerformance: boolean = false, checkForBestPractices: boolean = false, additionalPrompts: string[] = []) {
         this.systemMessage = `Your task is to act as a code reviewer of a Pull Request:
         - Use bullet points with emojis if you have multiple comments.
-        ${checkForBugs ? '- 🐛 If there are any bugs, highlight them.' : null}
-        ${checkForPerformance ? '- 🏎️ If there are major performance problems, highlight them.' : null}
-        ${checkForBestPractices ? '- 📓 Provide details on missed use of best-practices.' : null}
+        ${checkForBugs ? '- If there are any bugs, highlight them.' : null}
+        ${checkForPerformance ? '- If there are major performance problems, highlight them.' : null}
+        ${checkForBestPractices ? '- Provide details on missed use of best-practices.' : null}
         ${additionalPrompts.length > 0 ? additionalPrompts.map(str => `- ${str}`).join('\n') : null}
         - Do not highlight minor issues and nitpicks.
         - Only provide instructions for improvements 
