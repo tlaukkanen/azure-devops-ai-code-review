@@ -47,7 +47,7 @@ Use your own Azure OpenAI service endpoints to provide pull request code reviews
          bugs: true
          performance: true
          best_practices: true
-         file_extensions: 'js,ts,css,html,py,tf'
+         file_extensions: '.js,.ts,.css,.html,.py,.tf'
          file_excludes: 'file1.js,file2.py,secret.txt'
          additional_prompts: 'Fix variable naming, Ensure consistent indentation, Review error handling approach'`
    

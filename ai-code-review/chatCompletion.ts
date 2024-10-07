@@ -40,10 +40,15 @@ export class ChatCompletion {
             });
 
             let response = openAi.choices;
+            const tokenUsage = openAi.usage;
+            const tokenUsageString = JSON.stringify(tokenUsage);
+            console.info(`Usage: ${tokenUsageString}`);
 
             if (response.length > 0) {
                 return response[0].message.content!;
             }
+
+            
         }
 
         tl.warning(`Unable to process diff for file ${fileName} as it exceeds token limits.`)
