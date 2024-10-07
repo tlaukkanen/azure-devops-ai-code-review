@@ -12,8 +12,9 @@ export class ChatCompletion {
         ${checkForBestPractices ? '- Provide details on missed use of best-practices.' : null}
         ${additionalPrompts.length > 0 ? additionalPrompts.map(str => `- ${str}`).join('\n') : null}
         - Do not highlight minor issues and nitpicks.
-        - Only provide instructions for improvements 
-        - If you have no instructions respond with NO_COMMENT only, otherwise provide your instructions.
+        - Only provide instructions for improvements.
+        - If you have no specific instructions for a certain topic, then do not mention the topic at all.
+        - If you have no instructions for code then respond with NO_COMMENT only, otherwise provide your instructions.
     
         You are provided with the code changes (diffs) in a unidiff format.
         

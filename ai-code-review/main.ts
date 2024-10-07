@@ -55,10 +55,11 @@ export class Main {
             completionTokensTotal += review.completionTokens;
 
             if(review.response.indexOf('NO_COMMENT') < 0) {
+                console.info(`Completed review of file ${fileToReview}`)
                 await this._pullRequest.AddComment(fileToReview, review.response);
+            } else {
+                console.info(`No comments for file ${fileToReview}`)
             }
-
-            console.info(`Completed review of file ${fileToReview}`)
 
             tl.setProgress((fileToReview.length / 100) * index, 'Performing Code Review');
         }
@@ -66,12 +67,13 @@ export class Main {
         if(promptTokensPricePerMillionTokens !== 0 || completionTokensPricePerMillionTokens !== 0) {
             const promptTokensCost = promptTokensTotal * (promptTokensPricePerMillionTokens / 1000000);
             const completionTokensCost = completionTokensTotal * (completionTokensPricePerMillionTokens / 1000000);
-            const totalCostString = (promptTokensCost + completionTokensCost).toFixed(4);
-            console.info(`Total Prompt Tokens     : ${promptTokensTotal}`);
-            console.info(`Total Completion Tokens : ${completionTokensTotal}`); 
-            console.info(`Prompt Tokens Cost      : ${promptTokensCost} $`);
-            console.info(`Completion Tokens Cost  : ${completionTokensCost} $`);
-            console.info(`Total Cost              : ${totalCostString} $`);
+            const totalCostString = (promptTokensCost + completionTokensCost).toFixed(5);
+            console.info(`--- Cost Analysis ---`);
+            console.info(`🪙 Total Prompt Tokens     : ${promptTokensTotal}`);
+            console.info(`🪙 Total Completion Tokens : ${completionTokensTotal}`); 
+            console.info(`💵 Input Tokens Cost       : ${promptTokensCost} $`);
+            console.info(`💵 Output Tokens Cost      : ${completionTokensCost} $`);
+            console.info(`💰 Total Cost              : ${totalCostString} $`);
         }
         tl.setResult(tl.TaskResult.Succeeded, "Pull Request reviewed.");
     }
