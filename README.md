@@ -17,6 +17,7 @@ Use your own Azure OpenAI service endpoints to provide pull request code reviews
 - [Azure DevOps Account](https://dev.azure.com/)
 - Azure OpenAI endpoint URI
 - Azure OpenAI endpoint key
+- Optional: Pricing for input and output tokens (check from [Azure OpenAI Pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/#pricing))
 
 ## Getting started
 
@@ -44,6 +45,8 @@ Use your own Azure OpenAI service endpoints to provide pull request code reviews
          azureOpenAiDeploymentEndpointUrl: $(AzureOpenAiDeploymentEndpoint)
          azureOpenAiApiKey: $(AzureOpenAiDeploymentKey)
          azureOpenAiApiVersion: "2024-07-01-preview"
+         promptTokensPricePerToken: "0.00015"
+         completionTokensPricePerToken: "0.0006"
          bugs: true
          performance: true
          best_practices: true

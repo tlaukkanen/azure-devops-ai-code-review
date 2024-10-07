@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "ai-code-review",
   "publisher": "TommiLaukkanen",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "name": "AI Code Review Task",
   "description": "AI code review extension to review pull request changes using your own Azure OpenAI endpoints",
   "public": false,

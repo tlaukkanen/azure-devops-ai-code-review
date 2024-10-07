@@ -21,7 +21,8 @@ export class ChatCompletion {
         The response should be in markdown format.`
     }
 
-    public async PerformCodeReview(diff: string, fileName: string): Promise<string> {
+    public async PerformCodeReview(diff: string, fileName: string): 
+            Promise<{response: string, promptTokens: number, completionTokens: number}> {
 
         if (!this.doesMessageExceedTokenLimit(diff + this.systemMessage, 4097)) {
 
@@ -45,14 +46,16 @@ export class ChatCompletion {
             console.info(`Usage: ${tokenUsageString}`);
 
             if (response.length > 0) {
-                return response[0].message.content!;
+                return {
+                    response: response[0].message.content!,
+                    promptTokens: tokenUsage!.prompt_tokens,
+                    completionTokens: tokenUsage!.completion_tokens,
+                };
             }
-
-            
         }
 
         tl.warning(`Unable to process diff for file ${fileName} as it exceeds token limits.`)
-        return '';
+        return {response: '', promptTokens: 0, completionTokens: 0};
     }
 
     private doesMessageExceedTokenLimit(message: string, tokenLimit: number): boolean {
