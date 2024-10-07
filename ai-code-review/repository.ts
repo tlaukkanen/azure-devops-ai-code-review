@@ -1,6 +1,6 @@
 import * as tl from "azure-pipelines-task-lib/task";
 import { SimpleGit, SimpleGitOptions, simpleGit } from "simple-git";
-import binaryExtensions from "./binaryExtensions.json";
+import binaryExtensions from "./binaryExtensions";
 
 export class Repository {
 

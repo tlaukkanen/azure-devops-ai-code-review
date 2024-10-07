@@ -1,4 +1,4 @@
-[
+const binaryExtensions = [
 	"3dm",
 	"3ds",
 	"3g2",
@@ -257,4 +257,7 @@
 	"z",
 	"zip",
 	"zipx"
-]
+];
+
+export default binaryExtensions;
+
