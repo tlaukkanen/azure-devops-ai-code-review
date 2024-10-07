@@ -39,7 +39,7 @@ Use your own Azure OpenAI service endpoints to provide pull request code reviews
      pool:
        vmImage: 'ubuntu-latest'
      steps:
-     - task: OpenAICodeReviewTask@1
+     - task: AICodeReview@1
        inputs:
          azureOpenAiDeploymentEndpointUrl: $(AzureOpenAiDeploymentEndpoint)
          azureOpenAiApiKey: $(AzureOpenAiDeploymentKey)
