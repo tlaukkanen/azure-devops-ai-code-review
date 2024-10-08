@@ -11,7 +11,8 @@ export class ChatCompletion {
         checkForPerformance: boolean = false,
         checkForBestPractices: boolean = false,
         additionalPrompts: string[] = [],
-        private _maxTokens: number = 16384
+        private _maxTokens: number = 16384,
+        numberOfFilesToReview: number = 1
      ) {
         this.systemMessage = `Your task is to act as a code reviewer of a Pull Request:
         ${checkForBugs ? '- If there are any bugs, highlight them.' : null}
@@ -29,7 +30,16 @@ export class ChatCompletion {
         - Use bullet points if you have multiple comments. Utilize emojis to make your comments more engaging.
         - Use the code block syntax for larger code snippets but do not wrap the whole response in a code block
         - Use inline code syntax for smaller inline code snippets
-        `
+`
+        if (numberOfFilesToReview > 1) {
+            this.systemMessage += `
+        If there multiple files, then create table that lists the files and their respective comments. For example:
+        | File Name | Comments |
+        | --- | --- |
+        | file1.cs | - comment1 |
+        | file2.cs | - comment2<br>- comment3 |
+        | file3.cs | No comments |
+`}
     }
 
     public async PerformCodeReview(diff: string, fileName: string): 

@@ -38,20 +38,21 @@ export class Main {
             apiVersion: apiVersion
         });
         
+        let filesToReview = await this._repository.GetChangedFiles(fileExtensions, filesToExclude);
+
         this._chatCompletion = new ChatCompletion(
             client,
             tl.getBoolInput('bugs', true),
             tl.getBoolInput('performance', true),
             tl.getBoolInput('bestPractices', true),
             additionalPrompts,
-            maxTokens
+            maxTokens,
+            filesToReview.length
         );
         this._repository = new Repository();
         this._pullRequest = new PullRequest();
 
         await this._pullRequest.DeleteComments();
-
-        let filesToReview = await this._repository.GetChangedFiles(fileExtensions, filesToExclude);
 
         tl.setProgress(0, 'Performing Code Review');
         let promptTokensTotal = 0;
