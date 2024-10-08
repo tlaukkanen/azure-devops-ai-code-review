@@ -1,15 +1,7 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report to help us improve AI code reviewer
 title: ''
-labels: ''
-assignees: ''
-
----
-
----
-name: Bug Report
-about: Create a bug report to help us improve
 
 ---
 
@@ -37,7 +29,8 @@ If applicable, add screenshots to help illustrate the problem.
 
 ## Environment Information
 
-- Version: [e.g., 1.0.0]
+- Version: [e.g., 1.0.0] - can be seen in pipeline logs
+- LLM Model used: [e.g., gpt-4o-mini]
 
 ## Additional Information
 
