@@ -64,9 +64,10 @@ You can set the token pricing on the task parameters and then you can see from y
         azureOpenAiApiVersion: "2024-07-01-preview"
         promptTokensPricePerMillionTokens: "0.15"
         completionTokensPricePerMillionTokens: "0.6"
-        bugs: true
-        performance: true
-        bestPractices: true
+        addCostToComment: true
+        reviewBugs: true
+        reviewPerformance: true
+        reviewBestPractices: true
         reviewWholeDiffAtOnce: true
         maxTokens: 16384
         fileExtensions: '.js,.ts,.css,.html,.py,.tf'

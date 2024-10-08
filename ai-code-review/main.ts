@@ -31,6 +31,7 @@ export class Main {
         const completionTokensPricePerMillionTokens = parseFloat(tl.getInput('completionTokensPricePerMillionTokens', false) ?? '0.');
         const maxTokens = parseInt(tl.getInput('maxTokens', false) ?? '16384');
         const reviewWholeDiffAtOnce = tl.getBoolInput('reviewWholeDiffAtOnce', false);
+        const addCostToComments = tl.getBoolInput('addCostToComments', false);
 
         const client = new AzureOpenAI({
             endpoint: endpointUrl,
@@ -44,9 +45,9 @@ export class Main {
 
         this._chatCompletion = new ChatCompletion(
             client,
-            tl.getBoolInput('bugs', true),
-            tl.getBoolInput('performance', true),
-            tl.getBoolInput('bestPractices', true),
+            tl.getBoolInput('reviewBugs', true),
+            tl.getBoolInput('reviewPerformance', true),
+            tl.getBoolInput('reviewBestPractices', true),
             additionalPrompts,
             maxTokens,
             filesToReview.length
@@ -83,9 +84,17 @@ export class Main {
             promptTokensTotal += review.promptTokens;
             completionTokensTotal += review.completionTokens;
 
+            let comment = review.response;
+            if(addCostToComments) {
+                const promptTokensCost = promptTokensTotal * (promptTokensPricePerMillionTokens / 1000000);
+                const completionTokensCost = completionTokensTotal * (completionTokensPricePerMillionTokens / 1000000);
+                const totalCostString = (promptTokensCost + completionTokensCost).toFixed(6);
+                comment += `\n\n💰 _It cost $${totalCostString} to create this review_`;
+            }
+
             if(review.response.indexOf('NO_COMMENT') < 0) {
-                console.info(`Completed review of full diff`)
-                await this._pullRequest.AddComment("", review.response);
+                console.info(`Completed review for ${filesToReview.length} files`)
+                await this._pullRequest.AddComment("", comment);
             } else {
                 console.info(`No comments for full diff`)
             }
