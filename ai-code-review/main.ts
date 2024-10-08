@@ -38,6 +38,8 @@ export class Main {
             apiVersion: apiVersion
         });
         
+        this._repository = new Repository();
+        this._pullRequest = new PullRequest();
         let filesToReview = await this._repository.GetChangedFiles(fileExtensions, filesToExclude);
 
         this._chatCompletion = new ChatCompletion(
@@ -49,8 +51,6 @@ export class Main {
             maxTokens,
             filesToReview.length
         );
-        this._repository = new Repository();
-        this._pullRequest = new PullRequest();
 
         await this._pullRequest.DeleteComments();
 
@@ -94,12 +94,12 @@ export class Main {
         if(promptTokensPricePerMillionTokens !== 0 || completionTokensPricePerMillionTokens !== 0) {
             const promptTokensCost = promptTokensTotal * (promptTokensPricePerMillionTokens / 1000000);
             const completionTokensCost = completionTokensTotal * (completionTokensPricePerMillionTokens / 1000000);
-            const totalCostString = (promptTokensCost + completionTokensCost).toFixed(5);
+            const totalCostString = (promptTokensCost + completionTokensCost).toFixed(6);
             console.info(`--- Cost Analysis ---`);
             console.info(`🪙 Total Prompt Tokens     : ${promptTokensTotal}`);
             console.info(`🪙 Total Completion Tokens : ${completionTokensTotal}`); 
-            console.info(`💵 Input Tokens Cost       : ${promptTokensCost} $`);
-            console.info(`💵 Output Tokens Cost      : ${completionTokensCost} $`);
+            console.info(`💵 Input Tokens Cost       : ${promptTokensCost.toFixed(6)} $`);
+            console.info(`💵 Output Tokens Cost      : ${completionTokensCost.toFixed(6)} $`);
             console.info(`💰 Total Cost              : ${totalCostString} $`);
         }
         tl.setResult(tl.TaskResult.Succeeded, "Pull Request reviewed.");
