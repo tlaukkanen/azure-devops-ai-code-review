@@ -9,7 +9,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 19
+        "Patch": 20
     },
     "instanceNameFormat": "AI Code Review $(message)",
     "inputs": [
@@ -114,7 +114,7 @@
             "helpMarkDown": "Maximum number of tokens to use for each code review request. The default value is 16384 tokens."
         },
         {
-            "name": "addCostToComment",
+            "name": "addCostToComments",
             "type": "boolean",
             "label": "Add cost to comment",
             "defaultValue": false,
