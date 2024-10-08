@@ -15,6 +15,7 @@ export class ChatCompletion {
         numberOfFilesToReview: number = 1
      ) {
         this.systemMessage = `Your task is to act as a code reviewer of a Pull Request:
+        ${numberOfFilesToReview > 1 ? '- Generate high-level summary and a technical walkthrough of all pull request changes' : null}
         ${checkForBugs ? '- If there are any bugs, highlight them.' : null}
         ${checkForPerformance ? '- If there are major performance problems, highlight them.' : null}
         ${checkForBestPractices ? '- Provide details on missed use of best-practices.' : null}
@@ -33,12 +34,17 @@ export class ChatCompletion {
 `
         if (numberOfFilesToReview > 1) {
             this.systemMessage += `
-        If there multiple files, then create table that lists the files and their respective comments. For example:
+        Create table that lists the files and their respective comments. For example:
+
+        Summary of changes: ...
+
+        Feedback on files:
         | File Name | Comments |
         | --- | --- |
         | file1.cs | - comment1 |
-        | file2.cs | - comment2<br>- comment3 |
-        | file3.cs | No comments |
+        | file2.js | - comment2<br>- comment3 |
+        | file3.py | No comments |
+        | styles.css | - comment4 |
 `}
     }
 
