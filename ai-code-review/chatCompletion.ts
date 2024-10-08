@@ -5,7 +5,14 @@ import OpenAI, { AzureOpenAI } from 'openai';
 export class ChatCompletion {
     private readonly systemMessage: string = '';
 
-    constructor(private _openAi: AzureOpenAI, checkForBugs: boolean = false, checkForPerformance: boolean = false, checkForBestPractices: boolean = false, additionalPrompts: string[] = []) {
+    constructor(
+        private _openAi: AzureOpenAI, 
+        checkForBugs: boolean = false,
+        checkForPerformance: boolean = false,
+        checkForBestPractices: boolean = false,
+        additionalPrompts: string[] = [],
+        private _maxTokens: number = 16384
+     ) {
         this.systemMessage = `Your task is to act as a code reviewer of a Pull Request:
         ${checkForBugs ? '- If there are any bugs, highlight them.' : null}
         ${checkForPerformance ? '- If there are major performance problems, highlight them.' : null}
@@ -28,7 +35,7 @@ export class ChatCompletion {
     public async PerformCodeReview(diff: string, fileName: string): 
             Promise<{response: string, promptTokens: number, completionTokens: number}> {
 
-        if (!this.doesMessageExceedTokenLimit(diff + this.systemMessage, 4097)) {
+        if (!this.doesMessageExceedTokenLimit(diff + this.systemMessage, this._maxTokens)) {
 
             let openAi = await this._openAi.chat.completions.create({
                 messages: [
@@ -58,7 +65,7 @@ export class ChatCompletion {
             }
         }
 
-        tl.warning(`Unable to process diff for file ${fileName} as it exceeds token limits.`)
+        tl.warning(`Unable to process diff for ${fileName} as it exceeds token limits.`)
         return {response: '', promptTokens: 0, completionTokens: 0};
     }
 

@@ -32,9 +32,10 @@ export class PullRequest {
                 }
             ],
             status: 1,
-            threadContext: {
-                filePath: fileName,
-            },
+            // Don't provide filename if we are commenting on the whole PR
+            threadContext: fileName.length > 0 ? {
+                filePath: fileName
+            } : null,
             pullRequestThreadContext: {
                 changeTrackingId: 1,
                 iterationContext: {

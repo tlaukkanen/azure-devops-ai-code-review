@@ -50,6 +50,8 @@ Use your own Azure OpenAI service endpoints to provide pull request code reviews
         bugs: true
         performance: true
         bestPractices: true
+        reviewWholeDiffAtOnce: true
+        maxTokens: 16384
         fileExtensions: '.js,.ts,.css,.html,.py,.tf'
         fileExcludes: 'file1.js,file2.py,secret.txt'
         additionalPrompts: |

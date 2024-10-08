@@ -29,6 +29,8 @@ export class Main {
         const additionalPrompts = tl.getInput('additionalPrompts', false)?.split(',')
         const promptTokensPricePerMillionTokens = parseFloat(tl.getInput('promptTokensPricePerMillionTokens', false) ?? '0.');
         const completionTokensPricePerMillionTokens = parseFloat(tl.getInput('completionTokensPricePerMillionTokens', false) ?? '0.');
+        const maxTokens = parseInt(tl.getInput('maxTokens', false) ?? '16384');
+        const reviewWholeDiffAtOnce = tl.getBoolInput('reviewWholeDiffAtOnce', false);
 
         const client = new AzureOpenAI({
             endpoint: endpointUrl,
@@ -36,7 +38,14 @@ export class Main {
             apiVersion: apiVersion
         });
         
-        this._chatCompletion = new ChatCompletion(client, tl.getBoolInput('bugs', true), tl.getBoolInput('performance', true), tl.getBoolInput('bestPractices', true), additionalPrompts);
+        this._chatCompletion = new ChatCompletion(
+            client,
+            tl.getBoolInput('bugs', true),
+            tl.getBoolInput('performance', true),
+            tl.getBoolInput('bestPractices', true),
+            additionalPrompts,
+            maxTokens
+        );
         this._repository = new Repository();
         this._pullRequest = new PullRequest();
 
@@ -47,21 +56,38 @@ export class Main {
         tl.setProgress(0, 'Performing Code Review');
         let promptTokensTotal = 0;
         let completionTokensTotal = 0;
+        let fullDiff = '';
         for (let index = 0; index < filesToReview.length; index++) {
             const fileToReview = filesToReview[index];
             let diff = await this._repository.GetDiff(fileToReview);
-            let review = await this._chatCompletion.PerformCodeReview(diff, fileToReview);
+            if(!reviewWholeDiffAtOnce) {
+                let review = await this._chatCompletion.PerformCodeReview(diff, fileToReview);
+                promptTokensTotal += review.promptTokens;
+                completionTokensTotal += review.completionTokens;
+
+                if(review.response.indexOf('NO_COMMENT') < 0) {
+                    console.info(`Completed review of file ${fileToReview}`)
+                    await this._pullRequest.AddComment(fileToReview, review.response);
+                } else {
+                    console.info(`No comments for file ${fileToReview}`)
+                }
+
+                tl.setProgress((fileToReview.length / 100) * index, 'Performing Code Review');
+            } else {
+                fullDiff += diff;
+            }
+        }
+        if(reviewWholeDiffAtOnce) {
+            let review = await this._chatCompletion.PerformCodeReview(fullDiff, 'Full Diff');
             promptTokensTotal += review.promptTokens;
             completionTokensTotal += review.completionTokens;
 
             if(review.response.indexOf('NO_COMMENT') < 0) {
-                console.info(`Completed review of file ${fileToReview}`)
-                await this._pullRequest.AddComment(fileToReview, review.response);
+                console.info(`Completed review of full diff`)
+                await this._pullRequest.AddComment("", review.response);
             } else {
-                console.info(`No comments for file ${fileToReview}`)
+                console.info(`No comments for full diff`)
             }
-
-            tl.setProgress((fileToReview.length / 100) * index, 'Performing Code Review');
         }
 
         if(promptTokensPricePerMillionTokens !== 0 || completionTokensPricePerMillionTokens !== 0) {

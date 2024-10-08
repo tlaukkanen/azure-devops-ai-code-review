@@ -9,7 +9,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 13
+        "Patch": 14
     },
     "instanceNameFormat": "AI Code Review $(message)",
     "inputs": [
@@ -97,7 +97,22 @@
             "defaultValue": "0",
             "required": false,
             "helpMarkDown": "Unit price of completion tokens per million tokens. Check from Azure pricing table."
-        }
+        },
+        {
+            "name": "reviewWholeDiffAtOnce",
+            "type": "boolean",
+            "label": "Review whole diff at once",
+            "defaultValue": false,
+            "helpMarkDown": "Specify whether to review the whole diff at once or review each file separately.\n\n- Set to `true` to review the whole diff at once.\n- Set to `false` to review each file separately.\n\nDefault value is `false`."
+        },
+        {
+            "name": "maxTokens",
+            "type": "string",
+            "label": "Max tokens",
+            "defaultValue": "16384",
+            "required": false,
+            "helpMarkDown": "Maximum number of tokens to use for each code review request. The default value is 16384 tokens."
+        },
     ],
     "execution": {
         "Node10": {
